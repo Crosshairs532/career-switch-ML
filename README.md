@@ -10,7 +10,7 @@ This Dataset contains information about 5000 people and 12 features. It includes
 
 - Missing Values: 
 
-To handle categorical data we imputed the missing values with the most frequent values from the rows in a specific column. As the number of missing values were huge, we deceived to impute instead of removing the rows. 
+	`To handle categorical data we imputed the missing values with the most frequent values from the rows in a specific column. As the number of missing values were huge, we 		deceived to impute instead of removing the rows.` 
 
 	
 To handle numerical data we were aware of while imputing. To keep the actual distribution of a specific column, we checked using the mean, median , mode imputation. We have seen that in most columns using mode was better and it gave the actual columns distribution. 
