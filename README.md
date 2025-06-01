@@ -30,3 +30,7 @@ There were some columns that were in different units. And  each unit would repre
 ### Outlier:
 
 We saw some of our features had outliers like ‘company size”. Usually outliers had a negative impact on models while training. And so we used methods like IQR as it worked the best to remove the outliers from the data.
+
+# Conclusion 
+The Dataset had mixed data, along with missing values, corrupted data. Handling the Corrupted data at first felt difficult, But later on it was dealt with easily.  The model gave different accuracy results for different models. The best we could get was the Decision tree and Naive Bayes. Though they had the similarity of the same accuracy, the precision and recall value for both of the models was not satisfactory, still it was better than KNN and logistic regression. The probable reason could be an imbalanced class. In Some of the columns, there were some weird relations. For example, without enrolling to a university how can a candidate be a Graduate. So I think Some columns like this had something to do with the low results. 
+
