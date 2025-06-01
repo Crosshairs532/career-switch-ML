@@ -1,0 +1,3 @@
+# Introduction
+
+This project aims to classify whether a person will change his/her current job. The dataset contains information about the candidate's previous job history. Now let’s say we want to hire a candidate and train them. But it would be efficient to know whether after training a person will stay on their current job or not. It would save time and cost as well as the planning and categorizing the candidates. However, to reduce the burden of this work load, we are trying to create a machine learning model that would ease our work and predict whether a candidate will continue his/her job or not. 
