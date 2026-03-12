@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: Career-Switch
+Version: 0.0.1
+Summary: Career Switch Prediction
+Author: Md. Samsul Arefin
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: seaborn
+Requires-Dist: scikit-learn
+Requires-Dist: pymongo
+Requires-Dist: dotenv
+Requires-Dist: ipyKernel
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: summary
