@@ -7,4 +7,5 @@ pymongo
 dotenv
 ipyKernel
 tensorflow
+pymongo
 -e .
