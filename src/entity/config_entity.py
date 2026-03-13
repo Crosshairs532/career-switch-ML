@@ -1,6 +1,6 @@
 from datetime import datetime
 from dataclasses import dataclass
-from constants import *
+from src.constants import *
 
 TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y")
 
@@ -11,7 +11,6 @@ class TrainingPipelineConfig:
     timestamp: str = TIMESTAMP
 
 training_pipeline_config: TrainingPipelineConfig = TrainingPipelineConfig()
-
 
 @dataclass
 class DataIngestionConfig:

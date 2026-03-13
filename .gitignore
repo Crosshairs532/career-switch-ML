@@ -1,2 +1,4 @@
 Career_Switch_Prediction_Dataset.csv
 .env
+src/logs
+artifacts/*
