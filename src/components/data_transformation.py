@@ -34,11 +34,6 @@ class DataTransformation:
     def map_relevant_experience(self, df):
         df["relevent_experience"] = np.where(df["relevent_experience"] == 'Has relevent experience', 1, 0)
         return df
-    
-    # def impute_enrolled_university(self, df):
-    #     impute_mode  = SimpleImputer(strategy='most_frequent')
-    #     df["enrolled_university"] = impute_mode.fit_transform(df[["enrolled_university"]]).ravel()
-    #     return df
 
     def map_experience(self, df):
         
@@ -57,6 +52,7 @@ class DataTransformation:
         df[["company_size_min", "company_size_max"]] = df["company_size"].str.split("-", expand=True)
         df["company_size_min"] = pd.to_numeric(df["company_size_min"], errors='coerce')
         df["company_size_max"] = pd.to_numeric(df["company_size_max"], errors='coerce')
+        df[["company_size_min", "company_size_max"]] = df[["company_size_min", "company_size_max"]].fillna(0).astype(int)
         df.drop("company_size", axis=1, inplace=True)
         return df
     def map_last_new_job(self, df):
