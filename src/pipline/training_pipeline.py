@@ -2,6 +2,7 @@ from src.components.data_ingestion import DataIngestionConfig
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
 from src.components.data_transformation import DataTransformation
+from src.components.model_trainer import ModelTrainer
 from src.entity.config_entity import *
 from src.logger import get_logger
 
@@ -11,6 +12,7 @@ class TrainPipeline:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
         self.data_transformation_config = DataTransformationConfig()
+        self.model_trainer_config = ModelTrainerConfig()
     
         logger.info("Training Pipeline Initialized.")
     
@@ -28,6 +30,11 @@ class TrainPipeline:
         data_transformation = DataTransformation(dataIngestionArtifact, self.data_transformation_config, dataValidationArtifact)
         data_transformation_artifact = data_transformation.initiate_data_transformation()
         return data_transformation_artifact
+    
+    def startModelTraining(self, dataTransformationArtifact):
+        model_trainer_artifact = ModelTrainer(dataTransformationArtifact, self.model_trainer_config)
+
+        return model_trainer_artifact.initiate_model_training()
     def run_pipeline(self):
         logger.info("Data Ingestion Started.")
         dataIngestionArtifact = self.startDataIngestion()
@@ -40,3 +47,7 @@ class TrainPipeline:
         logger.info("Data Transformation Started.")
         dataTransformationArtifact = self.startDataTranformation(dataIngestionArtifact, dataValidationArtifact)
         logger.info("Data Transformation Finished")
+
+        logger.info("Model Training Started")
+        modelTrainerArtifact = self.startModelTraining(dataTransformationArtifact)
+
