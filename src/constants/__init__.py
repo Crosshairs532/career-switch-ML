@@ -43,3 +43,8 @@ MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
 MODEL_TRAINER_MODEL_CONFIG_FILE_PATH: str = os.path.join("config", "model.yaml")
 MIN_SAMPLES_SPLIT_MAX_DEPTH: int = 5
 MIN_SAMPLES_SPLIT_CRITERION: str = 'entropy'
+
+# AWS 
+AWS_REGION= "ap-souteast-1"
+AWS_ACCESS_KEY= os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_KEY= os.getenv('AWS_SECRET_ACCESS_KEY')

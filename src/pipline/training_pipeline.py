@@ -51,3 +51,4 @@ class TrainPipeline:
         logger.info("Model Training Started")
         modelTrainerArtifact = self.startModelTraining(dataTransformationArtifact)
 
+        
