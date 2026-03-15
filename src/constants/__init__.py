@@ -45,6 +45,10 @@ MIN_SAMPLES_SPLIT_MAX_DEPTH: int = 5
 MIN_SAMPLES_SPLIT_CRITERION: str = 'entropy'
 
 # AWS 
-AWS_REGION= "ap-souteast-1"
-AWS_ACCESS_KEY= os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_KEY= os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = "ap-southeast-1"
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_BUCKET_NAME = "career-switch-142333318099-ap-southeast-1-an"
+
+# Model
+MODEL_FILE_NAME = "model.pkl"

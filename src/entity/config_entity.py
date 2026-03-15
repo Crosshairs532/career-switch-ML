@@ -58,3 +58,16 @@ class ModelTrainerConfig:
     model_config_file_path: str = MODEL_TRAINER_MODEL_CONFIG_FILE_PATH
     _max_depth = MIN_SAMPLES_SPLIT_MAX_DEPTH
     _criterion = MIN_SAMPLES_SPLIT_CRITERION
+
+
+@dataclass
+class ModelEvaluationConfig:
+    bucket_name: str = AWS_BUCKET_NAME
+    s3_model_key_path: str = MODEL_FILE_NAME
+
+@dataclass
+class EvaluateModelResponse:
+    trained_model_f1_score: float
+    best_model_f1_score: float
+    is_model_accepted: bool
+    difference: float

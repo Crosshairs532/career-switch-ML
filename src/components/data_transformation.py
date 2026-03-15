@@ -59,7 +59,21 @@ class DataTransformation:
         df['last_new_job'] = df['last_new_job'].replace({'>4': '5', 'never': '0'})
         df['last_new_job'] = df['last_new_job'].astype(float)
         return df
-    
+     
+    def remove_outlier(self, df):
+        percentile25 = df['training_hours'].quantile(0.25)
+        percentile75 = df['training_hours'].quantile(0.75)
+        iqr = percentile75 - percentile25
+        upper_limit = percentile75 + 1.5 * iqr
+        lower_limit = percentile25 - 1.5 * iqr
+
+        df[(df["training_hours"] > upper_limit) | (df["training_hours"]< lower_limit)]
+
+        # capping
+        df["training_hours"] = np.where(df["training_hours"] > upper_limit, upper_limit, np.where(df["training_hours"]<lower_limit, lower_limit,df["training_hours"]))
+
+        return df
+   
 
     def get_data_transformer_object(self) -> ColumnTransformer:
 
@@ -124,20 +138,8 @@ class DataTransformation:
             return final_pipeline
         except Exception as e: 
             raise CustomException(e, sys)
+  
    
-    def remove_outlier(self, df):
-        percentile25 = df['training_hours'].quantile(0.25)
-        percentile75 = df['training_hours'].quantile(0.75)
-        iqr = percentile75 - percentile25
-        upper_limit = percentile75 + 1.5 * iqr
-        lower_limit = percentile25 - 1.5 * iqr
-
-        df[(df["training_hours"] > upper_limit) | (df["training_hours"]< lower_limit)]
-
-        # capping
-        df["training_hours"] = np.where(df["training_hours"] > upper_limit, upper_limit, np.where(df["training_hours"]<lower_limit, lower_limit,df["training_hours"]))
-
-        return df
     @staticmethod
     def read_data(file_path):
         try:
@@ -175,23 +177,34 @@ class DataTransformation:
             logger.info("Handling Test df.")
             test_df = self.correct_city_column(test_df)
             test_df = self.map_relevant_experience(test_df)
-            # test_df = self.impute_enrolled_university(test_df)
+            
             test_df = self.map_experience(test_df)
             test_df = self.map_company_size(test_df)
             test_df = self.map_last_new_job(test_df)
             test_df = self.remove_outlier(test_df)
+            # test_df = self.impute_enrolled_university(test_df)
             logger.info("Handled test df.")
 
             logger.info("Getting Preprocessor object.")
             preprocessor = self.get_data_transformer_object()
             logger.info("Got Preprocessor object.")
 
+            TARGET_COLUMN = 'will_change_career'
 
+            # Train
+            X_train = train_df.drop(columns=[TARGET_COLUMN])
+            y_train = train_df[TARGET_COLUMN]
+
+            # Test
+            X_test = test_df.drop(columns=[TARGET_COLUMN])
+            y_test = test_df[TARGET_COLUMN]
             logger.info("Fit and Transform on Training df.")
-            preprocessed_train_arr = preprocessor.fit_transform(train_df)
+            preprocessed_train_arr = preprocessor.fit_transform(X_train)  
 
             logger.info("Transform on Testing df.")
-            preprocessed_test_arr = preprocessor.transform(test_df)
+            preprocessed_test_arr = preprocessor.transform(X_test)        
+            preprocessed_train_arr = np.c_[preprocessed_train_arr, y_train]            
+            preprocessed_test_arr  = np.c_[preprocessed_test_arr, y_test]    
 
             save_object(self.data_transformation_config.transformed_object_file_path, preprocessor)
             save_numpy_array_data(self.data_transformation_config.transformed_train_file_path, array=preprocessed_train_arr)

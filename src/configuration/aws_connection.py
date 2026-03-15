@@ -8,7 +8,7 @@ from src.exception import CustomException
 class S3handler:
     s3_client=None
     s3_resource=None
-    def __init__(self, bucket_name: str, region: str =AWS_REGION):
+    def __init__(self, region: str =AWS_REGION):
         self._access_key = AWS_ACCESS_KEY
         self._secret_key = AWS_SECRET_KEY
         if self._access_key is None:
@@ -16,14 +16,14 @@ class S3handler:
         if self._secret_key is None:
             raise CustomException(f"Environment variable: ACCESS SECRET KEY is not set.")
         S3handler.s3_resource = boto3.resource('s3',
-                                    aws_access_key_id=self._access_key_id,
-                                    aws_secret_access_key=self._secret_access_key,
+                                    aws_access_key_id=self._access_key,
+                                    aws_secret_access_key=self._secret_key,
                                     region_name=AWS_REGION
                                     )
         S3handler.s3_client = boto3.client(
                             's3',
-                            aws_access_key_id=self._access_key_id,
-                            aws_secret_access_key=self._secret_access_key,
+                            aws_access_key_id=self._access_key,
+                            aws_secret_access_key=self._secret_key,
                             region_name=AWS_REGION
                             )
         
