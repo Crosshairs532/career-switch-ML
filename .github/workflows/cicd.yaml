@@ -27,7 +27,6 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:latest .
           docker push $REGISTRY/$REPOSITORY:latest
           echo "::set-output name=image::$REGISTRY/$REPOSITORY:latest"
-
   CD:
     needs: CI
     runs-on: self-hosted
