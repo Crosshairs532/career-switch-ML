@@ -44,6 +44,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       - name: Pull Image From ECR and Run Docker image
+
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ secrets.AWS_ECR }}
+          IMAGE_TAG: latest
         run: |
           docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker run -d \
