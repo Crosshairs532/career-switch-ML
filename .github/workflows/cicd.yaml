@@ -2,7 +2,6 @@ name: Deploy App From docker image to Ec2 Instance
 on:
   push:
     branches: [main]
-
 jobs:
   CI:
     runs-on: ubuntu-latest
