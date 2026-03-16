@@ -19,8 +19,10 @@ class MyModel:
         df = df.copy() 
     
         if "city" in df.columns:
-            df["city"] = df["city"].astype(str).str.split("_", expand=True)[1].astype("int")
-        
+            df["city"] = df["city"].astype(str).apply(
+                lambda x: int(x.split("_")[1]) if "_" in x else int(x)
+            )
+                    
         if "relevent_experience" in df.columns:
             df["relevent_experience"] = np.where(df["relevent_experience"] == 'Has relevent experience', 1, 0)
 

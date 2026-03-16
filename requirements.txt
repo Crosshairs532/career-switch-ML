@@ -1,4 +1,5 @@
 pandas
+PyYAML
 numpy
 matplotlib
 seaborn
@@ -7,10 +8,11 @@ pymongo
 dotenv
 ipyKernel
 tensorflow
-pymongopip  
+pymongo
 boto3
 uvicorn 
 fastapi 
 jinja2 
 python-multipart
+dill
 -e .

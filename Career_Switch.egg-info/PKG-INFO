@@ -11,6 +11,13 @@ Requires-Dist: scikit-learn
 Requires-Dist: pymongo
 Requires-Dist: dotenv
 Requires-Dist: ipyKernel
+Requires-Dist: tensorflow
+Requires-Dist: pymongo
+Requires-Dist: boto3
+Requires-Dist: uvicorn
+Requires-Dist: fastapi
+Requires-Dist: jinja2
+Requires-Dist: python-multipart
 Dynamic: author
 Dynamic: requires-dist
 Dynamic: summary

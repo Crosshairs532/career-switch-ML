@@ -6,3 +6,10 @@ scikit-learn
 pymongo
 dotenv
 ipyKernel
+tensorflow
+pymongo
+boto3
+uvicorn
+fastapi
+jinja2
+python-multipart
