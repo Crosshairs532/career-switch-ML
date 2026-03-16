@@ -45,7 +45,8 @@ class MyModel:
         try:
             logger.info("Starting prediction process.")
             print(dataframe.columns)
-            # dataframe = self.custom_preprocessing(dataframe)
+            dataframe = self.custom_preprocessing(dataframe)
+            logger.info("Custom Preprocessing DONE.")
             transformed_feature = self.preprocessing_object.transform(dataframe)
             logger.info("Using the trained model to get predictions")
             predictions = self.trained_model_object.predict(transformed_feature)

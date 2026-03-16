@@ -9,4 +9,8 @@ ipyKernel
 tensorflow
 pymongopip  
 boto3
+uvicorn 
+fastapi 
+jinja2 
+python-multipart
 -e .

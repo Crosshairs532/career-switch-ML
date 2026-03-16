@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Switch Predictor</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 700px;
+        }
+        h1 { color: #1a202c; margin-bottom: 8px; }
+        p.subtitle { color: #718096; margin-bottom: 30px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+        label { font-size: 13px; font-weight: 600; color: #4a5568; }
+        input, select {
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #2d3748;
+            background: #f7fafc;
+            transition: border 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+        .btn-predict {
+            margin-top: 24px;
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-predict:hover { background: #5a67d8; }
+
+        .btn-train {
+            margin-top: 12px;
+            width: 100%;
+            padding: 14px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-train:hover    { background: #38a169; }
+        .btn-train:disabled { background: #9ae6b4; cursor: not-allowed; }
+
+        .train-status {
+            display: none;
+            margin-top: 16px;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            background: #f0fff4;
+            color: #276749;
+            border: 1px solid #9ae6b4;
+        }
+        .train-status.error {
+            background: #fff5f5;
+            color:      #c53030;
+            border:     1px solid #feb2b2;
+        }
+        .train-status.running {
+            background: #fffbeb;
+            color:      #b7791f;
+            border:     1px solid #f6e05e;
+        }
+        .result {
+            margin-top: 24px;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            background: #ebf8ff;
+            color: #2b6cb0;
+            border: 1px solid #bee3f8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🎯 Career Switch Predictor</h1>
+    <p class="subtitle">Fill in the details below to predict career switch likelihood.</p>
+
+    <!-- ── Predict Form ───────────────────────────────────────── -->
+    <form method="post" action="/predict-form">
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>City</label>
+                <input type="text" name="city" placeholder="e.g. city_103" required>
+            </div>
+
+            <div class="form-group">
+                <label>City Development Index</label>
+                <input type="number" step="0.001" name="city_development_index" placeholder="e.g. 0.926" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Relevant Experience</label>
+                <select name="relevent_experience">
+                    <option value="Has relevent experience">Has Relevant Experience</option>
+                    <option value="No relevent experience">No Relevant Experience</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Enrolled University</label>
+                <select name="enrolled_university">
+                    <option value="no_enrollment">No Enrollment</option>
+                    <option value="Full time course">Full Time</option>
+                    <option value="Part time course">Part Time</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Education Level</label>
+                <select name="education_level">
+                    <option value="Graduate">Graduate</option>
+                    <option value="Masters">Masters</option>
+                    <option value="Phd">PhD</option>
+                    <option value="High School">High School</option>
+                    <option value="Primary School">Primary School</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Major Discipline</label>
+                <select name="major_discipline">
+                    <option value="STEM">STEM</option>
+                    <option value="Business Degree">Business</option>
+                    <option value="Humanities">Humanities</option>
+                    <option value="Arts">Arts</option>
+                    <option value="No Major">No Major</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Experience (years)</label>
+                <input type="text" name="experience" placeholder="e.g. 5 or >20 or <1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Company Size</label>
+                <select name="company_size">
+                    <option value="50-99">50-99</option>
+                    <option value="100-500">100-500</option>
+                    <option value="500-999">500-999</option>
+                    <option value="1000-4999">1000-4999</option>
+                    <option value="5000-9999">5000-9999</option>
+                    <option value="10000+">10000+</option>
+                    <option value="10-49">10-49</option>
+                    <option value="<10">&lt;10</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Company Type</label>
+                <select name="company_type">
+                    <option value="Pvt Ltd">Pvt Ltd</option>
+                    <option value="Funded Startup">Funded Startup</option>
+                    <option value="Public Sector">Public Sector</option>
+                    <option value="Early Stage Startup">Early Stage Startup</option>
+                    <option value="NGO">NGO</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Last New Job (years ago)</label>
+                <select name="last_new_job">
+                    <option value="never">Never</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value=">4">&gt;4</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Training Hours</label>
+                <input type="number" name="training_hours" placeholder="e.g. 36" required>
+            </div>
+
+        </div>
+
+        <button class="btn-predict" type="submit">🔍 Predict</button>
+    </form>
+
+    <!-- ── Train Button ───────────────────────────────────────── -->
+    <button class="btn-train" id="train-btn" onclick="trainModel()">
+        🚀 Train Model
+    </button>
+
+    <!-- Train status message -->
+    <div class="train-status" id="train-status"></div>
+
+    <!-- Prediction result -->
+    {% if result %}
+    <div class="result">{{ result }}</div>
+    {% endif %}
+
+</div>
+
+<script>
+    let pollInterval = null
+
+    async function trainModel() {
+        const btn    = document.getElementById('train-btn')
+        const status = document.getElementById('train-status')
+
+        // reset
+        status.className     = 'train-status'
+        status.style.display = 'none'
+
+        // block button + show running message
+        btn.disabled      = true
+        btn.textContent   = '⏳ Training...'
+        status.className      = 'train-status running'
+        status.style.display  = 'block'
+        status.textContent    = '🔄 Training in progress... Please wait.'
+
+        try {
+            const response = await fetch('/train')
+            const data     = await response.json()
+
+            if (data.status === 'already_running') {
+                status.textContent = '⚠️ Training is already in progress.'
+                return
+            }
+
+   
+            pollInterval = setInterval(checkTrainingStatus, 3000)
+
+        } catch (err) {
+            showError('❌ Could not start training. Check server logs.')
+            resetButton()
+        }
+    }
+
+    async function checkTrainingStatus() {
+        try {
+            const res  = await fetch('/train-status')
+            const data = await res.json()
+
+            const btn    = document.getElementById('train-btn')
+            const status = document.getElementById('train-status')
+
+            if (data.status === 'completed') {
+                clearInterval(pollInterval)
+                status.className     = 'train-status'
+                status.style.display = 'block'
+                status.textContent   = '✅ Training completed! New model is ready.'
+                resetButton()
+
+            } else if (data.status === 'failed') {
+                clearInterval(pollInterval)
+                showError('❌ Training failed. Check server logs.')
+                resetButton()
+            }
+            // if 'running' — keep polling
+
+        } catch (err) {
+            clearInterval(pollInterval)
+            showError('❌ Lost connection to server.')
+            resetButton()
+        }
+    }
+
+    function resetButton() {
+        const btn       = document.getElementById('train-btn')
+        btn.disabled    = false
+        btn.textContent = '🚀 Train Model'
+    }
+
+    function showError(msg) {
+        const status         = document.getElementById('train-status')
+        status.className     = 'train-status error'
+        status.style.display = 'block'
+        status.textContent   = msg
+    }
+</script>
+
+</body>
+</html>
+```
+
