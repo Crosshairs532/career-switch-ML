@@ -9,8 +9,26 @@ from src.pipline.training_pipeline import TrainPipeline
 from src.constants import *
 import pandas as pd
 import uvicorn
+from contextlib import asynccontextmanager
 
-app = FastAPI(title="Career Switch Prediction API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ── startup ────────────────────────────────
+    global model
+    model = storage.load_model_s3('career_switch_model/')
+    if model is None:
+        print("⚠️ No model found in S3")
+    else:
+        print("✅ Model loaded from S3")
+    
+    yield   # app runs here
+    
+    # ── shutdown (optional) ────────────────────
+    print("🛑 App shutting down")
+
+
+app = FastAPI(title="Career Switch Prediction API", lifespan=lifespan)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,12 +43,9 @@ model: MyModel  = None
 training_status = "idle"  
 
 
-@app.on_event("startup")
-async def load_model():
-    global model
-    model = storage.load_model_s3('career_switch_model/')
-    print("✅ Model loaded from S3")
 
+
+# pass lifespan to FastAPI
 
 
 class CareerInput(BaseModel):
@@ -58,6 +73,7 @@ async def home(request: Request):
 
 @app.post("/predict-form", response_class=HTMLResponse)
 async def predict_form(request: Request):
+    global model
     form = await request.form()
     data = {key: value for key, value in form.items()}
     df   = pd.DataFrame([data])
@@ -67,6 +83,10 @@ async def predict_form(request: Request):
     df["city"] = df["city"].apply(
             lambda x: x if x.startswith("city_") else f"city_{x}"
         )
+    
+    if model is None: 
+        model = storage.load_model_s3('career_switch_model/')
+
     prediction   = model.predict(df)
     result_label = "Will Change Career 🎯" if prediction[0] == 1 else "Will NOT Change Career 🏢"
 
